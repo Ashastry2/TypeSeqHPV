@@ -103,7 +103,7 @@ typing_variant_filter <- function(variants, lineage_defs, manifest,
         ungroup() %>%
         tidyr::gather("type_id", "type_status", starts_with("HPV"), factor_key = TRUE) %>%
         group_by(barcode) %>%
-        mutate(Num_Types_Pos = if_else(type_status == "pos", 1, 0)) %>%
+        mutate(Num_Types_Pos = if_else(type_status == "pos", 0, 1)) %>%
         mutate(Num_Types_Pos = sum(Num_Types_Pos)) %>%
         spread(type_id, type_status)
 
@@ -244,9 +244,8 @@ print("line 188")
 
     lineage_manifest = manifest %>%
         mutate(barcode = paste0(BC1, BC2)) %>%
-      write_csv("lineage_results.csv")
-    #inner_join(lineage_filtered) %>%
-     #   select(-BC1, -BC2) %>%
-      #  write_csv("lineage_results.csv")
+     inner_join(lineage_filtered) %>%
+        select(-BC1, -BC2) %>%
+        write_csv("lineage_results.csv")
 
 }
